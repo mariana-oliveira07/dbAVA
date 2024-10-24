@@ -1,1 +1,138 @@
 sggad 
+
+
+Vou resolver todas as questões do arquivo com base no enunciado que você enviou. Vamos organizar as queries SQL de acordo com o nível de dificuldade apresentado.
+
+Nível Básico
+
+	1.	Listar todos os alunos:
+
+SELECT * FROM alunos;
+
+
+	2.	Listar todos os cursos:
+
+SELECT * FROM cursos;
+
+
+	3.	Listar todos os instrutores:
+
+SELECT * FROM instrutores;
+
+
+	4.	Exibir o nome e o e-mail dos alunos:
+
+SELECT nome, email FROM alunos;
+
+
+	5.	Listar os pedidos feitos pelos alunos:
+
+SELECT alunos.nome, pedidos.data_hora, pedidos.curso_id 
+FROM pedidos
+JOIN alunos ON pedidos.aluno_id = alunos.id;
+
+
+
+Nível Intermediário
+
+	6.	Consultar os cursos e seus respectivos instrutores:
+
+SELECT cursos.nome AS curso, instrutores.nome AS instrutor
+FROM cursos
+JOIN instrutores ON cursos.instrutor_id = instrutores.id;
+
+
+	7.	Exibir cursos que custam mais de R$300:
+
+SELECT * FROM cursos WHERE preco > 300;
+
+
+	8.	Filtrar alunos que moram em um endereço específico:
+
+SELECT * FROM alunos WHERE endereco = 'Rua XV de Novembro';
+
+
+	9.	Exibir todos os números de telefone dos instrutores:
+
+SELECT instrutores.nome, telefones.numero
+FROM telefones
+JOIN instrutores ON telefones.instrutor_id = instrutores.id;
+
+
+	10.	Listar o nome e o tipo de todos os cursos:
+
+SELECT cursos.nome, tipos.nome AS tipo
+FROM cursos
+JOIN tipos ON cursos.tipo_id = tipos.id;
+
+	11.	Exibir os alunos e os cursos que eles compraram:
+
+SELECT alunos.nome, cursos.nome AS curso
+FROM pedidos
+JOIN alunos ON pedidos.aluno_id = alunos.id
+JOIN cursos ON pedidos.curso_id = cursos.id;
+
+	12.	Cursos mais baratos que R$200:
+
+SELECT * FROM cursos WHERE preco < 200;
+
+	13.	Listar os cursos de um tipo específico (Data Science):
+
+SELECT * FROM cursos
+JOIN tipos ON cursos.tipo_id = tipos.id
+WHERE tipos.nome = 'Data Science';
+
+Nível Avançado
+
+	14.	Exibir o total de cursos por tipo:
+
+SELECT tipos.nome AS tipo, COUNT(cursos.id) AS total_cursos
+FROM cursos
+JOIN tipos ON cursos.tipo_id = tipos.id
+GROUP BY tipos.nome;
+
+	15.	Exibir alunos que compraram cursos de Programação:
+
+SELECT alunos.nome
+FROM pedidos
+JOIN alunos ON pedidos.aluno_id = alunos.id
+JOIN cursos ON pedidos.curso_id = cursos.id
+JOIN tipos ON cursos.tipo_id = tipos.id
+WHERE tipos.nome = 'Programação';
+
+	16.	Cursos e os números de alunos matriculados:
+
+SELECT cursos.nome AS curso, COUNT(pedidos.aluno_id) AS total_alunos
+FROM pedidos
+JOIN cursos ON pedidos.curso_id = cursos.id
+GROUP BY cursos.nome;
+
+	17.	Exibir cursos com instrutores que possuem mais de um telefone:
+
+SELECT cursos.nome AS curso, instrutores.nome AS instrutor
+FROM cursos
+JOIN instrutores ON cursos.instrutor_id = instrutores.id
+WHERE instrutores.id IN (
+    SELECT instrutor_id FROM telefones
+    GROUP BY instrutor_id
+    HAVING COUNT(instrutor_id) > 1
+);
+
+	18.	Listar alunos que possuem e-mails com domínio “@mail.com”:
+
+SELECT nome FROM alunos WHERE email LIKE '%@mail.com';
+
+	19.	Exibir cursos com o maior preço em cada tipo:
+
+SELECT tipos.nome AS tipo, cursos.nome AS curso, MAX(cursos.preco) AS maior_preco
+FROM cursos
+JOIN tipos ON cursos.tipo_id = tipos.id
+GROUP BY tipos.nome, cursos.nome;
+
+	20.	Exibir o nome dos instrutores e os cursos que ministram:
+
+SELECT instrutores.nome AS instrutor, cursos.nome AS curso
+FROM cursos
+JOIN instrutores ON cursos.instrutor_id = instrutores.id;
+
+Essas são as soluções em SQL para as questões da sua prova prática. Se precisar de mais alguma coisa ou ajustes, só avisar!
